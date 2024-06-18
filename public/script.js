@@ -5,13 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     messageForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-
+    
         const message = userInput.value.trim();
         if (message === '') return;
-
+    
         appendMessage('You', message, 'user');
         userInput.value = '';
-
+    
         try {
             const response = await fetch('https://nodejs-chat-bot.vercel.app/chat', {
                 method: 'POST',
@@ -20,15 +20,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({ message }),
             });
-
+    
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                const errorMessage = `Error ${response.status}: ${response.statusText}`;
+                throw new Error(errorMessage);
             }
-
+    
             const data = await response.json();
             appendMessage('Bot', data.message, 'assistant');
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Fetch Error:', error.message);
+            // Display or handle the error on the UI as needed
         }
     });
 

@@ -13,6 +13,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(cors());
+app.use((err, req, res, next) => {
+    console.error('Error:', err.stack);
+    res.status(500).send('Something broke!');
+});
+
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -27,6 +32,10 @@ app.get('/', (req, res) => {
 app.post('/chat', async (req, res) => {
     try {
         const userInput = req.body.message;
+
+        if (!userInput) {
+            throw new Error('Empty message received');
+        }
 
         conversationHistory.push({ role: 'user', content: userInput });
 
@@ -43,8 +52,8 @@ app.post('/chat', async (req, res) => {
 
         res.json({ message: responseMessage });
     } catch (error) {
-        console.error('Error during chat completion:', error);
-        res.status(500).json({ error: 'Failed to process request' });
+        console.error('Error during chat completion:', error.message);
+        res.status(500).json({ error: error.message });
     }
 });
 
