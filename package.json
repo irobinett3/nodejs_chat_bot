@@ -1,0 +1,23 @@
+{
+    "name": "openai-chatbot-server",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "A simple server using Express to interact with OpenAI's chat API",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "keywords": [
+        "express",
+        "openai",
+        "chatbot"
+    ],
+    "author": "Your Name",
+    "license": "MIT",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "dotenv": "^10.0.0",
+        "express": "^4.17.2",
+        "openai": "^4.51.0"
+    }
+}
