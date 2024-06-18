@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
-import { textData } from './data.js'; // Assuming textData is correctly exported from data.js
+import { textData } from './data.js';
 import cors from 'cors';
 
 dotenv.config();
@@ -13,11 +13,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(cors());
-app.use((err, req, res, next) => {
-    console.error('Error:', err.stack);
-    res.status(500).send('Something broke!');
-});
-
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -32,10 +27,6 @@ app.get('/', (req, res) => {
 app.post('/chat', async (req, res) => {
     try {
         const userInput = req.body.message;
-
-        if (!userInput) {
-            throw new Error('Empty message received');
-        }
 
         conversationHistory.push({ role: 'user', content: userInput });
 
@@ -52,11 +43,11 @@ app.post('/chat', async (req, res) => {
 
         res.json({ message: responseMessage });
     } catch (error) {
-        console.error('Error during chat completion:', error.message);
-        res.status(500).json({ error: error.message });
+        console.error('Error during chat completion:', error);
+        res.status(500).json({ error: 'Failed to process request' });
     }
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on https://nodejs-chat-bot.vercel.app/');
 });
