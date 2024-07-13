@@ -14,9 +14,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+
+app.options('/chat', cors({
+    origin: 'https://personal-website-git-master-ian-robinetts-projects-ce4861df.vercel.app', // Replace with your actual frontend domain
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+}));
+
 // Enable CORS for all routes
 app.use(cors({
-    origin: '*', // Replace with your actual frontend domain
+    origin: 'https://personal-website-git-master-ian-robinetts-projects-ce4861df.vercel.app', // Replace with your actual frontend domain
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
 }));
@@ -58,5 +65,5 @@ app.post('/chat', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://172.234.203.215:${PORT}`);
+    console.log(`Server is running on ${PORT}`);
 });
