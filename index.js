@@ -1,8 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
-import { textData } from './data.js';
 import cors from 'cors';
+import { textData } from './data.js'
+
 
 dotenv.config();
 
@@ -12,13 +13,21 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
-app.use(cors());
+
+// Enable CORS for all routes
+app.use(cors({
+    origin: '*', // Replace with your actual frontend domain
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+}));
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
 let conversationHistory = [];
+
+conversationHistory.push({role: 'system', content: textData.join('\n') })
 
 app.get('/', (req, res) => {
     res.send('Chatbot is running');
@@ -49,5 +58,5 @@ app.post('/chat', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is running on https://nodejs-chat-bot.vercel.app/');
+    console.log(`Server is running on http://172.234.203.215:${PORT}`);
 });
